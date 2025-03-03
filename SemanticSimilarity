@@ -1,0 +1,189 @@
+import java.util.*;
+import java.io.*;
+import java.lang.invoke.MethodHandles;
+
+public class SemanticSimilarity
+{
+    HashMap<String, HashMap<String, Integer>> word_map = new HashMap<String, HashMap<String, Integer>>();
+
+    /* Algorithm 1 implementation:
+        
+        Input: a sequence of sentences
+        Output: a data structure that permits efficient similarity queries
+            on pairs of words
+            
+        NOTE: The output is NOT RETURNED. This is a constructor.
+        Instead, some instance variable(s) of this class are initialized
+        using the data from the sentences.
+    */
+    public SemanticSimilarity(Iterable<String> sentences) {
+        
+        
+        
+        //iterate through each sentence
+        for (String sentence : sentences) {
+            HashSet<String> words_in_sentence = new HashSet<String>();
+            String[] list_of_words = sentence.split(" ");
+            //iterate through words in the sentence, add them to hashset
+            for (String word : list_of_words){
+                words_in_sentence.add(word);
+            }
+            
+            //iterate through a word in the sentence
+            for (String current_word : words_in_sentence){
+                //adding entries that aren't keys in outer hashmap to the outer hashmap with an empty hasmap as their value
+                if (this.word_map.get(current_word) == null){
+                    this.word_map.put(current_word, new HashMap<String, Integer>());
+                }
+                //iterate through all the other words in the sentence
+                for (String unique_word : words_in_sentence){
+                    //if unique word is the same as current word, don't add it to the map
+                    if (unique_word == current_word){
+                        continue;
+                    }
+                    //if there is no inner key corresponding to the current word, initialize it with 1 as a value
+                    if (this.word_map.get(current_word).get(unique_word) == null && unique_word != current_word){
+                        word_map.get(current_word).put(unique_word, 1);
+                    }
+                    //if it does exist, increase its value by 1
+                    else{
+                        this.word_map.get(current_word).put(unique_word, word_map.get(current_word).get(unique_word)+1);
+                    }
+    
+                }
+            }
+            
+        }
+        
+        // TODO: Implement Algorithm 1
+
+    }
+
+
+
+
+    /* Algorithm 2 implementation
+    
+        Input: a pair of words
+        Ouput: the cosine similarity of those words given the data
+            initially provided to the constructor
+    */
+    public double similarity(String s1, String s2) {
+        double numerator = 0.0;
+        HashMap<String, Integer> innerMap1 = word_map.get(s1);
+        HashMap<String, Integer> innerMap2 = word_map.get(s2);
+        if (innerMap1 == null || innerMap2 == null){
+            return -1;
+        }
+        //iterate through keys of inner hashmap
+        for (String word : innerMap1.keySet()){
+            //if it is present in both inner hashmaps, multiply values together and add to numerator
+            if (word_map.get(s2).get(word) != null){
+                numerator += (innerMap1.get(word) * innerMap2.get(word));
+            }
+        }
+        double denominator1 = 0.0;
+        for (String word : innerMap1.keySet()){
+            denominator1 += (innerMap1.get(word)) * (innerMap1.get(word));
+        }
+        denominator1 = Math.sqrt(denominator1);
+        double denominator2 = 0.0;
+        for (String word : innerMap2.keySet()){
+            denominator2 += (innerMap2.get(word)) * (innerMap2.get(word));
+        }
+        denominator2 = Math.sqrt(denominator2);
+        double denominator = denominator1 * denominator2;
+        if (denominator == 0.0){
+            return -1;
+        }
+        return numerator/denominator; 
+    }
+
+
+
+    /* Don't forget to add any instance variables for data structures
+        that the class will need to initialize in the constructor (Algorithm 1)
+    */
+    
+    
+    
+    
+    
+    
+    /* EXAMPLE CODE FOR TESTING */
+    
+    public static void main(String[] args) {
+
+        Scanner scan;
+
+        if (args.length > 0 && !args[0].equals("-")) {
+            // if an argument is provided, assume it's a filename, and use text from it
+            try {
+                scan = new Scanner(new File(args[0]));
+            } catch (FileNotFoundException e) {
+                System.err.printf("%s: error: could not open %s for reading%n", MethodHandles.lookup().lookupClass().getSimpleName(), args[0]);
+                System.exit(1);
+                return;
+            }
+        } else {
+            // if there's no argument, read from standard input
+            scan = new Scanner(System.in);
+        }
+
+        // convert the input to sentences
+        Iterable<String> sentences = parseText(scan);
+        
+        // print out the sentences as they will be passed into Algorithm 1
+        for (String sentence: sentences) {
+            System.out.println(sentence);
+        }
+        System.out.println();
+        
+        // run Algorithm 1
+        SemanticSimilarity sim = new SemanticSimilarity(sentences);
+        
+        // TODO: add some code here to inspect sim, descriptors, or try to get similarity
+    }
+
+    
+
+    // Characters that are used by the parser helper function
+    private static String endPunct = "[\\Q.!?\\E]";
+    private static String otherPunct = "[\\p{Punct}&&[^\\Q.!?\\E]]";
+
+    // Helper function so that any text can be converted to the input expected
+    // Input: An iterator that returns strings, e.g., a Scanner
+    // Output: A sequence of sentences
+    public static Iterable<String> parseText(Iterator<String> text) {
+        ArrayList<String> sentences = new ArrayList<String>();
+
+        StringBuilder sentence = null;
+        while (text.hasNext()) {
+            if (sentence == null) {
+                sentence = new StringBuilder();
+            }
+            String word = text.next().toLowerCase().replaceAll(otherPunct, "");
+            if (word.endsWith(".") || word.endsWith("!") || word.endsWith("?")) {
+                word = word.replaceAll(endPunct, "");
+                if (sentence.length() > 0) {
+                    sentence.append(" ");
+                }
+                sentence.append(word);
+                sentences.add(sentence.toString());
+                sentence = null;
+            }
+            else {
+                if (sentence.length() > 0) {
+                    sentence.append(" ");
+                }
+                sentence.append(word);
+            }
+        }
+        if (sentence != null) {
+            sentences.add(sentence.toString());
+        }
+
+        return sentences;
+    }
+
+}
