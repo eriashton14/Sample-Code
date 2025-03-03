@@ -43,7 +43,6 @@ public class CoinGame {
         path2.add(path.get((pathlength / 2 )));
         returnLists.add(path1);
         returnLists.add(path2);
-        //System.out.println(returnLists);
         return returnLists;
     }
 
@@ -58,15 +57,11 @@ public class CoinGame {
         queue.add(startNode);
         //run bfs until queue is empty
         while (queue.size() != 0){
-            // System.out.println(exploredNodes);
-            // System.out.println(queue);
             System.out.println("outer while loop");
             Node currentNode  = queue.poll();
             //return path when you reach start2 from start1 in an even number of moves
             if (currentNode.nodeNum == start2 && currentNode.distance % 2 == 0){
                 currentNode.path.add(start2);
-                //System.out.println("distance: ");
-                //System.out.println(currentNode.distance);
                 return currentNode.path;
             }
             System.out.println(currentNode.nodeNum);
@@ -75,16 +70,12 @@ public class CoinGame {
             System.out.println(neighbors);
             //look at every other neighbor to ensure path from nodes is even
             for (int neighbor : neighbors){
-              //System.out.println("outer for loop");
                 for (int second_neighbor : graph.get(neighbor) ){
-                  // System.out.println("inner for loop");
                     //if you haven't seen node yet, add it and update its path and distance from start1
                     if (!exploredNodes.contains(second_neighbor)){
                         exploredNodes.add(second_neighbor);
                          //needed to get to current node to get to its second neighbor
                         ArrayList<Integer> secondNeighPath = (ArrayList<Integer>) currentNode.path.clone();
-                        //secondNeighPath = ;
-                        //System.out.println(secondNeighPath);
                         secondNeighPath.add(currentNode.nodeNum);
                         secondNeighPath.add(neighbor);
                         //always 2 moves away from current
@@ -112,8 +103,6 @@ public class CoinGame {
         if (path == null){
             return null;
         }
-        //System.out.println("path: ");
-        //System.out.println(path);
         Collection<List<Integer>> returnList = setPathLists(path);
         return returnList;
 
