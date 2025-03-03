@@ -55,7 +55,7 @@ public class SemanticSimilarity
             
         }
         
-        // TODO: Implement Algorithm 1
+
 
     }
 
@@ -101,16 +101,10 @@ public class SemanticSimilarity
 
 
 
-    /* Don't forget to add any instance variables for data structures
-        that the class will need to initialize in the constructor (Algorithm 1)
-    */
+
     
     
     
-    
-    
-    
-    /* EXAMPLE CODE FOR TESTING */
     
     public static void main(String[] args) {
 
@@ -142,7 +136,7 @@ public class SemanticSimilarity
         // run Algorithm 1
         SemanticSimilarity sim = new SemanticSimilarity(sentences);
         
-        // TODO: add some code here to inspect sim, descriptors, or try to get similarity
+
     }
 
     
