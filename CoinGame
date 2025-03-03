@@ -1,0 +1,126 @@
+
+import java.util.*;
+
+
+
+
+
+
+public class CoinGame {
+
+
+    //nodes store the path taken to get to them and how far path is from start1
+    public static class Node{
+        Integer nodeNum;
+        int distance;
+        ArrayList<Integer> path;
+
+        public Node(Integer nodeNum, int distance, ArrayList<Integer> path){
+            this.nodeNum = nodeNum;
+            this.distance = distance;
+            this.path = path;
+            
+        }
+    }
+
+
+
+
+    //use path from start1 to start2 to make 2 paths where they converge at end
+    public static   Collection<List<Integer>> setPathLists(ArrayList<Integer> path){
+        ArrayList<List<Integer>> returnLists = new ArrayList<List<Integer>>();
+        ArrayList<Integer> path1 = new ArrayList<>();
+        ArrayList<Integer> path2 = new ArrayList<>();
+        System.out.println(path);
+        int pathlength = path.size();
+        for (int i = 0; i < pathlength / 2; i++){
+            System.out.println("setpathlistloop");
+            //add first half of our complete path to path1 and second half to path2
+           path1.add(path.get(i));
+           path2.add(path.get(pathlength-i-1));
+        }
+        path1.add(path.get((pathlength / 2 )));
+        path2.add(path.get((pathlength / 2 )));
+        returnLists.add(path1);
+        returnLists.add(path2);
+        //System.out.println(returnLists);
+        return returnLists;
+    }
+
+    //runs bfs on second neighbors to find an even path from start1 to start2
+    public static ArrayList<Integer> bfs(HashMap<Integer, HashSet<Integer>> graph,
+	int start1, int start2){
+        //keep track of nodes visited and nodes to visit, add startnode as first to explore
+        HashSet<Integer> exploredNodes = new HashSet<>();
+        Queue<Node> queue = new LinkedList<>();
+        exploredNodes.add(start1);
+        Node startNode = new Node(start1, 0, new ArrayList<>());
+        queue.add(startNode);
+        //run bfs until queue is empty
+        while (queue.size() != 0){
+            // System.out.println(exploredNodes);
+            // System.out.println(queue);
+            System.out.println("outer while loop");
+            Node currentNode  = queue.poll();
+            //return path when you reach start2 from start1 in an even number of moves
+            if (currentNode.nodeNum == start2 && currentNode.distance % 2 == 0){
+                currentNode.path.add(start2);
+                //System.out.println("distance: ");
+                //System.out.println(currentNode.distance);
+                return currentNode.path;
+            }
+            System.out.println(currentNode.nodeNum);
+            HashSet<Integer> neighbors = graph.get(currentNode.nodeNum);
+            
+            System.out.println(neighbors);
+            //look at every other neighbor to ensure path from nodes is even
+            for (int neighbor : neighbors){
+              //System.out.println("outer for loop");
+                for (int second_neighbor : graph.get(neighbor) ){
+                  // System.out.println("inner for loop");
+                    //if you haven't seen node yet, add it and update its path and distance from start1
+                    if (!exploredNodes.contains(second_neighbor)){
+                        exploredNodes.add(second_neighbor);
+                         //needed to get to current node to get to its second neighbor
+                        ArrayList<Integer> secondNeighPath = (ArrayList<Integer>) currentNode.path.clone();
+                        //secondNeighPath = ;
+                        //System.out.println(secondNeighPath);
+                        secondNeighPath.add(currentNode.nodeNum);
+                        secondNeighPath.add(neighbor);
+                        //always 2 moves away from current
+                        queue.add(new Node(second_neighbor,  currentNode.distance +2, secondNeighPath));
+                    }
+                    
+                }
+            }
+        }
+            //no even path found
+            return null;
+        }
+               
+          
+       
+
+
+    public static Collection<List<Integer>> coinPaths(
+	HashMap<Integer, HashSet<Integer>> graph,
+	int start1, int start2){
+        // = new Collection<List<Integer>>();
+        
+        ArrayList<Integer> path = bfs(graph, start1, start2);
+        //no possible path return null
+        if (path == null){
+            return null;
+        }
+        //System.out.println("path: ");
+        //System.out.println(path);
+        Collection<List<Integer>> returnList = setPathLists(path);
+        return returnList;
+
+    }
+
+    public static void main(String[] args) {
+   
+
+    }
+}
