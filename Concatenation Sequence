@@ -10,58 +10,30 @@ public class ConcatSequence{
     //look at every possible pair of splits that got to number you are on, apply this logic recursively
     //so it gives you the previous one
     public static ArrayList<Integer> backtrack(int[] stringLengths, ArrayList<Integer> returnArray, int[][] optimalArray, int start, int end, int slice){
-       // System.out.println("----------");
-       // System.out.println("in backtrack with start " + start + " and end: " + end);
         if (start == end){
-            // System.out.println("im returning and adding this slice: " + slice);
-            // returnArray.add(slice);
             return returnArray;
         }
-        //int targetCost = optimalArray[start][end];
-        //int problength = end - start;
         int totalAdd = 0;
         for (int j = start; j <= end; j ++){
             totalAdd += stringLengths[j];
         }
-        //System.out.println("total add: " + totalAdd);
-        for (int i = start; i < end; i ++){
-            // if (start >= stringLengths.length - 1){
-            //     System.out.println("im returning");
-            //     return returnArray;
-            // }
-            // System.out.println("looping with start value: " + start + " and end value: " + end + " and potential split at: " + i);
-            // System.out.print("splitcost: ");
-            // System.out.println(totalAdd + optimalArray[start][i] + optimalArray[i + 1][end]);
-            // System.out.println("known optimal: " + optimalArray[start][end]);
+        for (int i = start; i < end; i ++){  
             if (totalAdd + optimalArray[start][i] + optimalArray[i + 1][end] == optimalArray[start][end]){
-               // System.out.println("split it at: " + i);
-               // System.out.println("updated int at index to be: " + returnArray[index]);
                slice = i;
                returnArray.add(slice);
                break;
-               // System.out.println("making recursive call with these start and end times: " + start + i);
-               //currently only makes calls to far left parts of recursion
-              
-              
-            
-                
-                //backtrack(stringLengths, returnArray, optimalArray, i + 1, i + 2, index);
 
-            }
-            
-        
+            } 
         }
         
         backtrack(stringLengths, returnArray, optimalArray, start, slice, slice);
-            // System.out.println("making recursive call with these start and end times: " + i + end);
-         backtrack(stringLengths, returnArray, optimalArray, slice + 1, end, slice);
+        backtrack(stringLengths, returnArray, optimalArray, slice + 1, end, slice);
         return returnArray;
     }
 
 
     //find minimum cost for each subset and remember it
     //this means we must consider every single start and end point
-
     //gives optimal cost of given subset
     public static int getOptimal(int[] stringLengths, int start, int problength, int[][] optimalArray){
        
@@ -76,15 +48,9 @@ public class ConcatSequence{
         }
         
         for (int i = start; i < end; i ++){
-            // System.out.println("totalAdd: " + totalAdd);
-            // System.out.println("first chunk: " + optimalArray[start][i]);
-            // System.out.println("second chunk: " + optimalArray[i + 1][end]);
             int potent_optimal = totalAdd + optimalArray[start][i] + optimalArray[i + 1][end];
-        //    System.out.println("potential: " + potent_optimal);
-        //     System.out.println("slice at index: " + i);
             if (potent_optimal < optimal){
                 optimal = potent_optimal;
-               // System.out.println("new optimal: " + optimal);
             }
     
 
@@ -115,55 +81,28 @@ public class ConcatSequence{
                     break;
                 }
                 optimal = getOptimal(stringLengths, start, probLength, optimalArray);
-                
-               // System.out.println("for start: " + start + " end: " + end + " optimal is: " + optimal);
                 mapOptimal(optimal, start, probLength, optimalArray);
             }
-           // System.out.println("\n" + "------");
-           //System.out.println("GRAPH: ");
              for (int i = 0; i < stringLengths.length; i ++){
                  for (int j = 0; j < stringLengths.length; j++){
                      System.out.print(optimalArray[i][j] + " ");
                  }
-                // System.out.println();
              }
-            //System.out.println(optimalArray);
         int start = 0;
         int end = stringLengths.length - 1;
-        //int index = stringLengths.length - 2;
         ArrayList<Integer> reverseArray = new ArrayList<>();
         reverseArray = backtrack(stringLengths, reverseArray, optimalArray, start, end, 0);
-       // System.out.println("reversed array: ");
-        for (int i = 0; i  < reverseArray.size(); i ++){
-          // System.out.print(reverseArray.get(i));
-        }
-        System.out.println("\n final array: ");
         for (int i = 0; i < returnArray.length; i ++){
             returnArray[i] = reverseArray.get(returnArray.length - i - 1);
-            System.out.println(returnArray[i]);
         }
-    //    System.out.println("\n" + "------");
-    //    System.out.println("GRAPH: ");
-        for (int i = 0; i < stringLengths.length; i ++){
-            for (int j = 0; j < stringLengths.length; j++){
-                //System.out.print(optimalArray[i][j] + " ");
-            }
-            // System.out.println();
-        }
-        
+
         return returnArray;
 
     }
 
 
     public static void main(String[] args) {
-        int[] input = {3, 7, 10};
-        int[] input2 = {1, 1, 2, 3, 5, 8, 13, 21, 34, 55};
-        int[] input3 = {3, 5, 5, 3};
-        int[] input4 = {10, 2, 2, 10};
-        int[] input5 = {10, 3, 7};
-        int[] input6 = {1, 3, 5, 7, 9, 11, 13};
-        optimalOrder(input3);
+      
     }
 }
 
