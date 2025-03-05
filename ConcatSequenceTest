@@ -1,0 +1,104 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+ import java.util.Arrays;
+
+public class ConcatSequenceTest {
+
+    
+
+    
+    @Test
+    public void testLabExample() {
+        int[] inputLengths = {3, 7, 10};
+        int[] expectedOrder = {0, 1};
+        int[] resultOrder = ConcatSequence.optimalOrder(inputLengths);
+        assertArrayEquals(expectedOrder, resultOrder, "The optimal order is incorrect, should be [0, 1]");
+    }
+
+  
+    @Test
+    public void testCompilationBaseline() {
+        int[] inputLengths = {1, 1, 2, 3, 5, 8, 13, 21, 34, 55};
+        int[] expectedOrder = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+        int[] resultOrder = ConcatSequence.optimalOrder(inputLengths);
+        assertArrayEquals(expectedOrder, resultOrder, "The optimal order is incorrect, should be [0, 1, 2, 3, 4, 5, 6, 7, 8]");
+    }
+
+   
+    @Test
+    public void testShortExponential() {
+        int[] inputLengths = {1, 2, 4, 8, 16, 32, 64, 128};
+        int[] expectedOrder = {0, 1, 2, 3, 4, 5, 6};
+        int[] resultOrder = ConcatSequence.optimalOrder(inputLengths);
+        assertArrayEquals(expectedOrder, resultOrder, "The optimal order is incorrect, should be [0, 1, 2, 3, 4, 5, 6]");
+        }
+
+    @Test
+    public void testInnerSmallest() {
+        int[] inputLengths = {10, 2, 2, 10};
+        int[] expectedOrder = {1, 2, 0};
+        int[] resultOrder = ConcatSequence.optimalOrder(inputLengths);
+        assertArrayEquals(expectedOrder, resultOrder, "The optimal order is incorrect, should be [1, 2, 0]");
+    }
+
+    
+    @Test
+    public void testMirror() {
+        int[] inputLengths = {3, 5, 5, 3};
+        int[] expectedOrder = {0, 2, 1};
+        int[] resultOrder = ConcatSequence.optimalOrder(inputLengths);
+        assertArrayEquals(expectedOrder, resultOrder, "The optimal order is incorrect, should be [0, 2, 1] ");
+    }
+
+ 
+
+    @Test
+    public void testShortDecreasing() {
+        int[] inputLengths = {7, 6, 5, 4, 3, 2, 1};
+        int[] expectedOrder = {5, 4, 2, 3, 0, 1};
+        int[] resultOrder = ConcatSequence.optimalOrder(inputLengths);
+        assertArrayEquals(expectedOrder, resultOrder, "The optimal order is incorrect, should be [5, 4, 2, 3, 0, 1] ");
+    }
+
+
+    @Test
+    public void testShortIncreasing() {
+        int[] inputLengths = {1, 3, 5, 7, 9, 11, 13};
+        int[] expectedOrder = {5, 3, 0, 1, 2, 4};
+        int[] resultOrder = ConcatSequence.optimalOrder(inputLengths);
+        assertArrayEquals(expectedOrder, resultOrder, "The optimal order is incorrect, should be [5, 3, 0, 1, 2, 4] ");
+    }
+
+
+  
+
+
+    @Test
+    public void testFibonacci() {
+        int[] inputLengths = {1, 1, 2, 3, 5, 8, 13, 21, 34, 55};
+        int[] expectedOrder = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+        int[] resultOrder = ConcatSequence.optimalOrder(inputLengths);
+        assertArrayEquals(expectedOrder, resultOrder, "The optimal order is incorrect, should be [0, 1, 2, 3, 4, 5, 6, 7, 8] ");
+    }
+
+
+
+    @Test
+    public void twoStrings() {
+        int[] inputLengths = {5, 4};
+        int[] expectedOrder = {0};
+        int[] resultOrder = ConcatSequence.optimalOrder(inputLengths);
+        assertArrayEquals(expectedOrder, resultOrder, "The optimal order is incorrect, should be [0] ");
+    }
+
+    
+
+
+
+
+
+
+   
+
+}
+
